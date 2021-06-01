@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Switch, StyleSheet, View } from 'react-native';
 
 import { Header } from '../components/Header';
 import { MyTasksList } from '../components/MyTasksList';
@@ -13,6 +13,7 @@ interface Task {
 
 export function Home() {
   const [tasks, setTasks] = useState<Task[]>([])
+  const [darktheme, setDarkTheme] = useState<boolean>(false)
 
   function handleAddTask(newTaskTitle: string) {
       
@@ -50,16 +51,48 @@ export function Home() {
   }
 
   return (
-    <>
-      <Header />
+    <View style = {[styles.container, (darktheme ? {backgroundColor:'#1F1F1F'}: {backgroundColor:"#FFF"})]}>
+      
+      <Header darktheme={darktheme} />
 
-      <TodoInput addTask={handleAddTask} />
-
+      <Switch
+        style={darktheme ? styles.switchDark : styles.switch}
+        trackColor={{ false: "#757577", true: "#9347CA"}}
+        thumbColor={darktheme ? "#9347CA" : "#f4f3f4"}
+        onValueChange={() => setDarkTheme(oldState => !oldState)}
+        value={darktheme}
+      />
+      <TodoInput darkTheme={darktheme} addTask={handleAddTask} />
       <MyTasksList 
+        darkTheme={darktheme}
         tasks={tasks} 
         onPress={handleMarkTaskAsDone} 
         onLongPress={handleRemoveTask} 
       />
-    </>
+    </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container:{
+    justifyContent:'flex-start',
+    width:'100%',
+    height:'100%',
+    
+   
+  },
+  switch:{
+    backgroundColor: '#273FAD',
+    position:'absolute',
+    left:315,
+    top:30,
+    
+    
+  },
+  switchDark:{
+    position:'absolute',
+    left:315,
+    top:30,
+    backgroundColor: '#282B5A',
+  }
+});

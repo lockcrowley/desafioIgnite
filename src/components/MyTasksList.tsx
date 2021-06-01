@@ -1,10 +1,14 @@
 import React from 'react';
-import { FlatList, TouchableOpacity, View, Text, StyleSheet, FlatListProps } from 'react-native';
+import { FlatList, TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 
-function FlatListHeaderComponent() {
+interface flatListHeaderProps{
+  darkTheme: boolean;
+}
+
+function FlatListHeaderComponent({darkTheme} : flatListHeaderProps) {
   return (
     <View>
-      <Text style={styles.header}>Minhas tasks</Text>
+      <Text style={darkTheme ? styles.headerDark : styles.header}>Minhas tasks</Text>
     </View>
   )
 }
@@ -15,11 +19,12 @@ interface MyTasksListProps {
     title: string;
     done: boolean;
   }[];
+  darkTheme: boolean;
   onPress: (id: number) => void;
   onLongPress: (id: number) => void;
 }
 
-export function MyTasksList({ tasks, onLongPress, onPress }: MyTasksListProps) {
+export function MyTasksList({ tasks, onLongPress, onPress, darkTheme }: MyTasksListProps) {
   return (
     <FlatList
       data={tasks}
@@ -31,21 +36,30 @@ export function MyTasksList({ tasks, onLongPress, onPress }: MyTasksListProps) {
             activeOpacity={0.7}
             onPress={() => onPress(item.id)}
             onLongPress={() => onLongPress(item.id)}
-            style={item.done === true ? styles.taskButtonDone : styles.taskButton}
+            style={
+              item.done === true ? darkTheme ? styles.taskButtonDoneDark : styles.taskButtonDone : 
+              darkTheme ? styles.taskButtonDark : styles.taskButton
+            }
           >
             <View 
               testID={`marker-${index}`}
-              style={item.done === true ? styles.taskMarkerDone : styles.taskMarker} 
+              style={
+                item.done === true ? darkTheme ? styles.taskMarkerDoneDark : styles.taskMarkerDone : 
+                darkTheme ? styles.taskMarkerDark : styles.taskMarker
+              } 
             />
             <Text 
-              style={item.done === true ? styles.taskTextDone : styles.taskText}
+              style={
+                item.done === true ? darkTheme ? styles.taskTextDoneDark : styles.taskTextDone : 
+                darkTheme ? styles.taskTextDark : styles.taskText
+              }
             >
               {item.title}
             </Text>
           </TouchableOpacity>
         )
       }}
-      ListHeaderComponent={<FlatListHeaderComponent />}
+      ListHeaderComponent={<FlatListHeaderComponent darkTheme={darkTheme}/>}
       ListHeaderComponentStyle={{
         marginBottom: 20
       }}
@@ -70,7 +84,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     borderRadius: 4,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   taskMarker: {
     height: 16,
@@ -82,6 +96,8 @@ const styles = StyleSheet.create({
   },
   taskText: {
     color: '#3D3D4D',
+    fontSize:20,
+    marginBottom:5
   },
   taskButtonDone: {
     flex: 1,
@@ -102,6 +118,59 @@ const styles = StyleSheet.create({
   },
   taskTextDone: {
     color: '#A09CB1',
-    textDecorationLine: 'line-through'
+    textDecorationLine: 'line-through',
+    fontSize:20,
+    marginBottom:5
+  },
+
+  headerDark: {
+    color: '#E1E1E6',
+    fontSize: 24,
+    fontFamily: 'Poppins-SemiBold'
+  },
+  taskButtonDark: {
+    flex: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 12,
+    marginBottom: 4,
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  taskMarkerDark: {
+    height: 16,
+    width: 16,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#3D3D4D',
+    marginRight: 10
+  },
+  taskTextDark: {
+    color: '#E1E1E6',
+    fontSize:20,
+    marginBottom:5
+  },
+  taskButtonDoneDark: {
+    flex: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 12,
+    marginBottom: 4,
+    borderRadius: 4,
+    backgroundColor: '#413A6F',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  taskMarkerDoneDark: {
+    height: 16,
+    width: 16,
+    borderRadius: 8,
+    backgroundColor: '#9347CA',
+    marginRight: 10
+  },
+  taskTextDoneDark: {
+    color: '#E1E1E6',
+    textDecorationLine: 'line-through',
+    fontSize:20,
+    marginBottom:5
   }
 })
