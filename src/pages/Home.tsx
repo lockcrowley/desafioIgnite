@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Alert } from 'react-native';
 
 import { Header } from '../components/Header';
 import { MyTasksList } from '../components/MyTasksList';
@@ -14,6 +15,11 @@ export function Home() {
   const [tasks, setTasks] = useState<Task[]>([])
 
   function handleAddTask(newTaskTitle: string) {
+      
+    if(newTaskTitle === ''){
+      return Alert.alert('Por favor digite uma tarefa')
+    }
+    
     const data = {
       id: Number(new Date().getTime()),
       title: newTaskTitle,

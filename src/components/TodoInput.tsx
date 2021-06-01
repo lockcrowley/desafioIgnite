@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, Platform, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Platform, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 
 import checkIcon from '../assets/icons/Check.png';
 
@@ -13,6 +13,7 @@ export function TodoInput({ addTask }: TodoInputProps) {
   function handleAddNewTask() {
     addTask(tasks)
     setTasks('')
+
   }
 
   return (
